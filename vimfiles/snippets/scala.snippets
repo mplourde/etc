@@ -1,0 +1,25 @@
+snippet main
+	object ${1:app} { 
+	  def main(args: Array[String]) {
+	    ${2:body}
+	  }
+	}
+
+snippet build
+	name := "${1:project}"
+	
+	version := "0.1"
+	
+	scalaVersion := "2.11.5"
+
+snippet ldep
+	libraryDependencies := Seq(
+	  "org.scalatest" %% "scalatest" % "2.2.1" % Test
+	  ,"${1:groupId}" % "${2:artifactId}" % "${3:revision}"
+	)
+
+snippet dep
+	  "${1:groupId}" % "${2:artifactId}" % "${3:revision}"
+
+snippet pac
+	package org.${1:name}

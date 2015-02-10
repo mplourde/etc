@@ -1,0 +1,56 @@
+snippet make_user
+	CREATE OR REPLACE FUNCTION make_user(name text, password text)
+	RETURNS void
+	AS $$
+		BEGIN
+			IF NOT EXISTS (SELECT 1 FROM pg_catalog.pg_user WHERE usename = name) THEN
+				EXECUTE 'CREATE ROLE "' || name || '" WITH LOGIN PASSWORD ''' || password || ''';';
+		END IF;
+	END;
+	$$ LANGUAGE plpgsql;
+
+
+snippet add_user
+	CREATE OR REPLACE FUNCTION add_user(name text) 
+	RETURNS void
+	AS $$
+		BEGIN
+			EXECUTE 'GRANT ${1:dbname}_user TO "' || name || '"';
+		END;
+	$$ LANGUAGE plpgsql;
+
+snippet add_admin
+	CREATE OR REPLACE FUNCTION add_admin(name text)
+	RETURNS void
+	AS $$
+		BEGIN
+			EXECUTE 'GRANT ${1:dbname}_user TO "' || name || '"';
+			EXECUTE 'GRANT ${2:$1}_admin TO "'  || name || '"';
+		END;
+	$$ LANGUAGE plpgsql;
+
+snippet roles
+	DO $$
+		DECLARE 
+			guest_name text = '${1:dbname}_guest';
+		BEGIN
+			IF EXISTS (SELECT 1 FROM pg_catalog.pg_group WHERE groname='${$1}_user') THEN
+				RAISE EXCEPTION 'There is already a role for ${$1}_user.';
+			END IF;
+			CREATE ROLE ${$1}_user;
+
+			IF EXISTS (SELECT 1 FROM pg_catalog.pg_group WHERE groname='${$1}_admin') THEN
+				RAISE EXCEPTION 'There is already a role for ${$1}_admin.';
+			END IF;
+			CREATE ROLE ${$1}_admin WITH SUPERUSER NOINHERIT IN GROUP ${$1}_user; -- allows creating plpython function
+
+			PERFORM make_user('${$1}_guest', '${$1}_guest');
+			PERFORM add_user('${$1}_guest');
+
+			PERFORM make_user('${$1}', '${$1}');
+			PERFORM add_admin('${$1}');
+
+			CREATE EXTENSION IF NOT EXISTS plpython3u;
+		END;
+	$$ LANGUAGE plpgsql;
+

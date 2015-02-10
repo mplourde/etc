@@ -1,0 +1,9 @@
+## Begin savepath auto-created section, do not edit
+## End savepath auto-created section
+graphics_toolkit('fltk') # gnuplot
+addpath('D:/Data/MatthewPlourde/JIM/t_tide/t_tide_v1.3beta_octave')
+addpath('D:/Data/MatthewPlourde/JIM/t_tide/Time Series Analysis/Filters')
+addpath('D:/Data/MatthewPlourde/JIM/t_tide/EFDC results/scripts')
+addpath("D:/Data/MatthewPlourde/JIM/t_tide/Time Series Analysis/Spectral Analysis")
+addpath("D:/Data/MatthewPlourde/JIM/t_tide/scripts")
+addpath("D:/Data/MatthewPlourde/WILL/Matlab_Import_Performance_NOAA_Precip")

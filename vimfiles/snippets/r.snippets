@@ -1,0 +1,45 @@
+snippet exp
+	#' @export
+
+snippet imp
+	#' @import ${1:library}
+
+snippet lib
+	library(${1:lib})
+
+snippet try
+	tryCatch(${1:try}, error=function(e) ${2:except})
+
+snippet if if
+	if (${1:condition}) {
+		${2:body}
+	}
+
+snippet if if/else
+	if (${1:condition1}) {
+		${2:body1}
+	} else {
+		${3:body3}
+	}
+
+snippet if if/else-if/else
+	if (${1:condition1}) {
+		${2:body1}
+	} else if (${3:condition2}) {
+		${4:body2}
+	} else {
+		${5:body3}
+	}
+
+snippet excel
+	chan.str <- sprintf("DRIVER=Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb);DBQ=%s", ${1:dbpath})
+	channel <- odbcDriverConnect(chan.str)
+
+snippet access
+	chan.str <- sprintf("Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=", ${1:dbpath})
+	channel <- odbcDriverConnect(chan.str)
+
+snippet postgres
+	chan.str <- sprintf("Driver={PostgreSQL ANSI};Server=%s;Uid=%s;Pwd=%s;Database=%s", 
+						${1:Server}, %{2:Uid}, %{3:Pwd}, %{4:Database})
+	channel <- odbcDriverConnect(chan.str)

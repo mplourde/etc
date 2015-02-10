@@ -1,0 +1,26 @@
+/*
+
+# R config
+!/Documents
+/Documents/*
+!/Documents/.Rprofile
+!/Documents/.Renviron
+
+# vim
+!_vimrc
+!/vimfiles
+/vimfiles/*
+!/vimfiles/colors
+!/vimfiles/plugin
+!/vimfiles/snippets
+!/vimfiles/syntax
+
+# MISC
+!.emacs
+!.virtualenv
+!.psqlrc
+!.octaverc
+!.gitignore
+!.bashrc
+!.gitconfig
+!hotkeys.ahk

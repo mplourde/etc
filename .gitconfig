@@ -1,0 +1,5 @@
+[http]
+	proxy = http://webproxy.phila.gov:8080
+[user]
+	name = Matthew Plourde
+	email = plourde.m@gmail.com

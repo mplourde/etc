@@ -1,0 +1,6 @@
+snippet pdb
+	import pdb;pdb.set_trace()
+snippet debug
+	import traceback, code
+	traceback.print_exc()
+	code.interact(local=dict(locals().items() + globals().items()))
