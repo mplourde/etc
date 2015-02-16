@@ -15,6 +15,11 @@
 !/vimfiles/snippets
 !/vimfiles/syntax
 
+# python
+!/.config
+/.config/*
+!/.config/flake8
+
 # MISC
 !.emacs
 !.virtualenv

@@ -22,7 +22,8 @@
                 devtools.desc.license='GPL',
                 useFancyQuotes=FALSE,
                 error=recover,
-                show.error.locations=TRUE #,
+                show.error.locations=TRUE,
+                pilotdb.testing=TRUE
                 #shiny.error=recover
                 )
 

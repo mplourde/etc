@@ -2,6 +2,7 @@
 "
 
 " Required Vundle setup
+let &shellslash=0
 filetype off
 if has("win32") || has("win16")
     set rtp+=~/vimfiles/bundle/Vundle.vim
@@ -14,10 +15,13 @@ endif
 
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'msanders/snipmate.vim'
+"Plugin 'MarcWeber/vim-addon-mw-utils' " required for vim-snipmate
+"Plugin 'tomtom/tlib_vim'              " required for vim-snipmate
+"Plugin 'garbas/vim-snipmate'          " vim-snipmate gives an error TriggerUpdate() not found 
+"Plugin 'msanders/snipmate.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-git'
-Plugin 'ervandew/supertab'
+"Plugin 'ervandew/supertab'           
 "Plugin 'sjl/gundo' " causes vundle to stall
 Plugin 'fs111/pydoc.vim'
 Plugin 'alfredodeza/pytest.vim'
@@ -32,6 +36,8 @@ filetype plugin indent on "vundle required
 
 "Bundle 'mitechie/pyflakes-pathogen'
 "Bundle 'vim-scripts/pep8'
+
+let g:EclimDisabled=1
 
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
@@ -159,6 +165,7 @@ inoremap <C-tab>   <Esc>:tabnext<CR>i
 inoremap <C-t>     <Esc>:tabnew<CR>
 
 let $WS = "D:\\Data\\MatthewPlourde\\"
+let $VSS = "C:\\Users\\matthew.plourde\\vimsessions\\"
 
 " type double quote in insert mode with Alt+quote
 imap <A-'> <ESC>2i'<ESC>i
@@ -234,6 +241,10 @@ set backup  "keep a backup file
 set backupext=.bak
 set nrformats= "treat all numbers as decimal when using <C-a>. default is to treat 007 as octal.
 set wildmode=longest,list "instead of autocompleting to the first match in ex mode, autocomplete to longest, display list
+
+
+" set pep8 textwidth for python
+" autocmd bufreadpre *.py setlocal textwidth=79
 
 " omni completion
 set ofu=syntaxcomplete#Complete "Turn on omni completion

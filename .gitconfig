@@ -3,3 +3,5 @@
 [user]
 	name = Matthew Plourde
 	email = plourde.m@gmail.com
+[credential]
+	helper = wincred
