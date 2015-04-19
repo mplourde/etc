@@ -22,8 +22,8 @@
                 devtools.desc.license='GPL',
                 useFancyQuotes=FALSE,
                 error=recover,
-                show.error.locations=TRUE,
-                pilotdb.testing=TRUE
+                show.error.locations=TRUE
+                #pilotdb.testing=TRUE
                 #shiny.error=recover
                 )
 
@@ -64,7 +64,6 @@
         #    }
         #}
 
-
         options(devtools.desc.author=dQuote(person('Matthew', 'Plourde', email='plourde.m@gmail.com', role=c('aut', 'cre'))))
         httr::set_config(httr::use_proxy(url="webproxy.phila.gov", port=8080))
 
@@ -72,12 +71,16 @@
         .interactive.env <- new.env()
 
         # define constant to desired default working directory
-        .ws <- 'D:/Data/MatthewPlourde'
+        machine.name <- Sys.info()['nodename']
+        if (machine.name == '28-ARAMPLOUR3') {
+            .ws <- 'D:/Data/MatthewPlourde'
+        } else {
+            .ws <- '~/workspace'
+        }
 
-        assign('.userpkgs', 
-            c('ggplot2', 'devtools', 'sos', 'RODBC', 'fortunes', 'shiny', 'roxygen2', 'httr', 'Cairo', 'data.table',
-            'magrittr', 'stringr', 'gridSVG', 'lubridate', 'grid', 'gridDebug', 'ggthemes')
-        , env=.interactive.env)
+            #c('ggplot2', 'devtools', 'sos', 'RODBC', 'fortunes', 'shiny', 'roxygen2', 'httr', 'Cairo', 'data.table',
+            #'magrittr', 'stringr', 'gridSVG', 'lubridate', 'grid', 'gridDebug', 'ggthemes', 'dplyr', 'tidyr')
+        assign('.userpkgs', c('shiny') , env=.interactive.env)
 
         loadpkgs <- function() {
             for (pkg in .userpkgs) {
@@ -260,6 +263,31 @@
             remove.packages(pkg)
         }, env=.interactive.env)
 
+        assign('.sdm', function(pkg, character.only=FALSE) {
+            if (!character.only)
+                pkg <- deparse(substitute(pkg))
+            .dm(pkg, character.only=TRUE)
+            
+            path <- .dev[[pkg]]
+            name <- basename(path)
+            app.source.path <- file.path(path, 'inst', paste0(name, '_app'))
+            app.name <- basename(app.source.path)
+
+            installed.path <- file.path(getOption('devtools.path'), name)
+            installed.app.path <- file.path(installed.path, app.name)
+            tryCatch(unlink(installed.app.path, recursive=TRUE), warning=function(w) NULL)
+            if (! file.exists(installed.app.path)) {
+                file.symlink(app.source.path, installed.app.path)
+            }
+        }, env=.interactive.env)
+
+        assign('.dm', function(pkg, character.only=FALSE) {
+            dev_mode()
+            if (!character.only)
+                pkg <- deparse(substitute(pkg))
+            .rinst(pkg, character.only=TRUE)
+        }, env=.interactive.env)
+
         assign('.rinst', local({ 
             cached.pkg <- NULL
             function(pkg, character.only=FALSE, ...) {
@@ -340,7 +368,7 @@
         #napply <- function(names, fn) sapply(names, function(x)
         #                                     fn(get(x, pos = pos)))
         #names <- ls(pos = pos, pattern = pattern)
-        #obj.class <- napply(names, function(x) as.character(class(x))[1])
+        #obj.class <- napply(names, function(x) aggggs.character(class(x))[1])
         #obj.mode <- napply(names, mode)
         #obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
         #obj.size <- napply(names, object.size)

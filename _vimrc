@@ -15,6 +15,7 @@ endif
 
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/syntastic'
 "Plugin 'MarcWeber/vim-addon-mw-utils' " required for vim-snipmate
 "Plugin 'tomtom/tlib_vim'              " required for vim-snipmate
 "Plugin 'garbas/vim-snipmate'          " vim-snipmate gives an error TriggerUpdate() not found 
@@ -30,15 +31,24 @@ Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'nvie/vim-flake8'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'kevinw/pyflakes-vim'
 
 call vundle#end()         "vundle required
 filetype plugin indent on "vundle required
 
-"Bundle 'mitechie/pyflakes-pathogen'
 "Bundle 'vim-scripts/pep8'
 
+
+" Syntastic plugin settings
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+" eclim plugin settings
 let g:EclimDisabled=1
 
+" indent plugin settings
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 
@@ -96,6 +106,11 @@ autocmd GUIEnter * set visualbell t_vb=
 
 noremap <F12> <Esc>:syntax sync fromstart<CR>
 inoremap <F12> <C-o>:syntax sync fromstart<CR>
+" find all non-ascii charaters
+noremap <F11> /[^\x00-\x7F]<CR>
+inoremap <F11> <C-o>/[^\x00-\x7F]<CR>
+" set nowrap
+
 
 " aesthetics
 if has('gui_win32')
@@ -188,10 +203,15 @@ set statusline+=\ %m      "modified flag
 set statusline+=\ %r      "read only flag
 set statusline+=\ %h      "help file flag
 set statusline+=%=      "left/right separator
+set statusline+=b%n\ -\  " buffer number
 set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ %P    "percent through file
 
+" syntastic status line
+set statusline+=\ %#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 "function! AirlineInit()
 "    let g:airline_section_a = airline#section#create(['mode', ' ', 'branch'])
@@ -244,7 +264,7 @@ set wildmode=longest,list "instead of autocompleting to the first match in ex mo
 
 
 " set pep8 textwidth for python
-" autocmd bufreadpre *.py setlocal textwidth=79
+autocmd bufreadpre *.py setlocal textwidth=120
 
 " omni completion
 set ofu=syntaxcomplete#Complete "Turn on omni completion
