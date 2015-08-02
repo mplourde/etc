@@ -142,10 +142,6 @@ function! g:ToggleNuMode()
 endfunc
 map <C-l> :call g:ToggleNuMode()<CR>
 
-" map synx sync fromstart to <F12>
-noremap <F12> <Esc>:syntax sync fromstart<CR>
-inoremap <F12> <C-o>:syntax sync fromstart<CR>
-
 "let &winheight = 3 " set minimum num lines for current window. set to 999 for 'rolodex mode'
 set noea " don't equalize window height after splitting
 
@@ -230,6 +226,7 @@ autocmd FileType scala setlocal softtabstop=2
 
 
 set ruler
+let $TMP="c:/temp"
 set backupdir=~/tmp
 set directory=~/tmp
 set hlsearch  "highlight search results. nohl to turn off
@@ -256,7 +253,7 @@ set mouse=a  "full mouse support in the console
 set backspace=2  "allow backspacing over lines
 set cino=(0<Enter>  "align function parameters on multi-lines
 "set cmdheight=2  "allow room for errors to display
-set textwidth=200  "always limit the width of text to 80
+set textwidth=120  "always limit the width of text to 80
 set backup  "keep a backup file
 set backupext=.bak
 set nrformats= "treat all numbers as decimal when using <C-a>. default is to treat 007 as octal.

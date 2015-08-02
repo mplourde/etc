@@ -5,3 +5,5 @@
 	email = plourde.m@gmail.com
 [credential]
 	helper = wincred
+[push]
+	default = current

@@ -17,7 +17,7 @@
                 max.print=100,               # limit the amount that R will print to screen.
                 editor = '"C:/Program Files (x86)/Vim/vim74/gvim.exe" "-c" "set filetype=r"',
                 shiny.reactlog=TRUE,
-                #repos=list(CRAN="http://cran.us.r-project.org")
+                #repos=list(CRAN="http://cran.us.r-project.org"input )
                 #devtools.desc.author='Matthew Plourde <plourde.m@gmail.com>',
                 devtools.desc.license='GPL',
                 useFancyQuotes=FALSE,
@@ -34,6 +34,7 @@
 
         # Windows only. Use internet explorer proxy settings
         setInternet2(TRUE) 
+        #.libPaths(Sys.getenv('R_LIBS_USER'))
 
         # not using any more. switched to default in My Documents
         # create a local package directory for storing installed packages. This avoids 
@@ -54,7 +55,7 @@
 
         # default packages to load on startup
         #user.pkgs <- 
-        #pkgs <- c('ggplot2', 'devtools', 'sos', 'RODBC', 'fortunes', 'gdata', 'data.table', 'vimcom.plus')
+        pkgs <- c('ggplot2', 'devtools', 'sos', 'RODBC', 'fortunes', 'shiny')
         # if any of these packages aren't installed, install them.
         #for (pkg in pkgs) {
         #    ret <- try(if (! pkg %in% installed.packages()) install.packages(pkg))
@@ -80,7 +81,7 @@
 
             #c('ggplot2', 'devtools', 'sos', 'RODBC', 'fortunes', 'shiny', 'roxygen2', 'httr', 'Cairo', 'data.table',
             #'magrittr', 'stringr', 'gridSVG', 'lubridate', 'grid', 'gridDebug', 'ggthemes', 'dplyr', 'tidyr')
-        assign('.userpkgs', c('shiny') , env=.interactive.env)
+        assign('.userpkgs', c() , env=.interactive.env)
 
         loadpkgs <- function() {
             for (pkg in .userpkgs) {
@@ -290,7 +291,7 @@
 
         assign('.rinst', local({ 
             cached.pkg <- NULL
-            function(pkg, character.only=FALSE, ...) {
+            function(pkg, character.only=FALSE, dependencies=FALSE, ...) {
                 if (missing(pkg)) {
                     if (is.null(cached.pkg))
                         stop("You must supply the name of a package.")
@@ -304,7 +305,7 @@
                 cached.pkg <<- pkg
 
                 try(.uinst(pkg, character.only=TRUE), silent=TRUE)
-                .inst(pkg, character.only=TRUE, ...)
+                .inst(pkg, character.only=TRUE, dependencies=dependencies, ...)
             } 
         }) , env=.interactive.env)
 
