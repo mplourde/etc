@@ -17,11 +17,12 @@
                 max.print=100,               # limit the amount that R will print to screen.
                 editor = '"C:/Program Files (x86)/Vim/vim74/gvim.exe" "-c" "set filetype=r"',
                 shiny.reactlog=TRUE,
-                #repos=list(CRAN="http://cran.us.r-project.org"input )
+                repos=list(CRAN="http://cran.us.r-project.org")
+                ,
                 #devtools.desc.author='Matthew Plourde <plourde.m@gmail.com>',
-                devtools.desc.license='GPL',
-                useFancyQuotes=FALSE,
+                #devtools.desc.license='GPL',
                 error=recover,
+                checkPackageLicense=TRUE,
                 show.error.locations=TRUE
                 #pilotdb.testing=TRUE
                 #shiny.error=recover
@@ -33,7 +34,7 @@
         #        #, getOption("repos"))
 
         # Windows only. Use internet explorer proxy settings
-        setInternet2(TRUE) 
+        #setInternet2(TRUE) 
         #.libPaths(Sys.getenv('R_LIBS_USER'))
 
         # not using any more. switched to default in My Documents
@@ -65,8 +66,9 @@
         #    }
         #}
 
-        options(devtools.desc.author=dQuote(person('Matthew', 'Plourde', email='plourde.m@gmail.com', role=c('aut', 'cre'))))
-        httr::set_config(httr::use_proxy(url="webproxy.phila.gov", port=8080))
+        options(devtools.desc.author=paste0('"', 
+            person('Matthew', 'Plourde', email='plourde.m@gmail.com', role=c('aut', 'cre')), '"'))
+        #httr::set_config(httr::use_proxy(url="webproxy.phila.gov", port=8080))
 
         # define an environment to hold an assortment of convenience functions for interactive mode
         .interactive.env <- new.env()
@@ -111,6 +113,22 @@
 
         # mask the print.data.frame function so that if the number of 
         # of rows is greater than N, print only the first n and last n rows.
+        assign('.tv', function() {
+            library(tibble)
+            library(dplyr)
+            library(tidyr)
+            library(purrr)
+            library(magrittr)
+            library(ggplot2)
+            library(stringr)
+            library(lubridate)
+            library(hms)
+            library(forcats)
+            library(modelr)
+            library(readr)
+            library(RODBC)
+        }, env=.interactive.env)
+
         assign('print.data.frame', function(df, ...) {
                N <- 10
                n <- 5
@@ -153,14 +171,45 @@
             cat(output, file=stderr(), sep='\n')
         }, env=.interactive.env)
 
+        assign('.sp', 
+        
+        .sp <- function(p, height=1000, width=2000) {
+            library(shiny)
+
+            ui <- fixedPage(
+                fixedRow(
+                    column(width=3, numericInput('height', 'height', value=height)),
+                    column(width=3, numericInput('width', 'width', value=width)),
+                    submitButton()
+                ),
+                plotOutput('p', height=height, width=width)
+            )
+
+            server <- function(input, output, session) {
+                p_height <- reactive({
+                    input$height
+                })
+
+                p_width <- reactive({
+                    input$width
+                })
+
+                output$p <- renderPlot(height=p_height, width=p_width, {
+                    p
+                })
+            }
+
+            shinyApp(ui=ui, server=server)
+        }
+        , env=.interactive.env)
+
         assign('.pplot', function(...) {
             dev.new()
             print(...)
         }, env=.interactive.env)
 
-        assign('.ed', function(d) {
-            d[] <- lapply(d, function(x) if ('POSIXct' %in% class(x)) format(x, '%Y-%m-%d %H:%M:%S') else x)
-            edit(d)
+        assign('.ed', function(x) {
+            edit(x, editor='gvim')
         }, env=.interactive.env)
 
         assign('.oca', function () {
@@ -195,29 +244,16 @@
         # note, these are only useful if you use the devtools package to manage your projects
         assign('.dev', 
             list(
-                genplotter = file.path(.ws, 'GARY', 'genplotter'), # path to genplotter project
-                #ppdb=file.path(.ws, 'DWAYNE', 'PilotProgram', 'ppdb'), # path to ppdb
-                pilotdb=file.path(.ws, 'DWAYNE', 'pilotdb', 'pilotdb'), # path to ppdb
-                wpcpSummary=file.path(.ws, 'RAJESH', 'WPCP_summary', 'wpcpSummary'),
-                shinyTable=file.path(.ws, 'DWAYNE', 'shinyTable'),
-                netflixex=file.path(.ws, 'netflix', 'netflixex'),
-                GGally=file.path(.ws, 'netflix', 'ggally'),
-                raininterp=file.path(.ws, 'GARY', 'inverse_distance_24gage', 'raininterp'),
-                leaflet=file.path(.ws, 'GARY', 'inverse_distance_24gage', 'leaflet-shiny'),
-                roow=file.path(.ws, 'RAJESH', 'roow'),
-                DispersionCalculator=file.path(.ws, 'JIM', 'dye_study', 'dispersion-calculator'),
-                bigpicture=file.path(.ws, 'ED', 'bigpicture'),
-                plantanalysis=file.path(.ws, 'RAJESH', 'plantanalysis'),
-                oow=file.path(.ws, 'RAJESH', 'oow'),
-                plotly=file.path(.ws, 'RAJESH', 'plotly'),
-                gsi13=file.path(.ws, 'HENRY', 'gsi13'),
-                tracerProp=file.path(.ws, 'GARY', 'tracerProp'),
-                svgg=file.path(.ws, 'DWAYNE', 'svgg'),
-                ggplot2=file.path(.ws, 'DWAYNE', 'ggplot2'),
-                gridSVG=file.path(.ws, 'DWAYNE', 'gridSVG', 'pkg'),
-                wetWeatherTreatmentAnalysis=file.path(.ws, 'GARY', 'wet-weather-treatment-analysis'),
-                shinyGridster=file.path(.ws, 'DWAYNE', 'shiny-gridster'),
-                postorm=file.path(.ws, 'RAJESH', 'poststorm', 'postorm')
+                unifcast='C:\\\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Universe Forecast\\mplourde\\unifcast',
+                ims2='C:\\\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Inventory Management System\\mplourde\\ims v2',
+                ims='C:\\\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Inventory Management System\\mplourde\\dev2',
+                imsprod='C:\\\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Inventory Management System\\mplourde\\prod',
+                plp='C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Post Log Pacing\\mplourde\\dev',
+                svgg="C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Inventory Management System\\mplourde\\svgg",
+                clex="C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\Cluster Explorer\\mplourde\\dev",
+                coldhands="C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\coldhands\\coldhands",
+                cpmfloor="C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\cpm_floors\\cpmfloor",
+                ratings="C:\\Users\\mplourde.CROSSMW\\Source\\Workspaces\\TelAmerica2\\DataScience\\PCM\\ratings"
             ), env=.interactive.env)
 
         # define function that takes a project name in .dev and loads the project with devtools::load_all
@@ -252,6 +288,21 @@
                 }
                 devtools::install(.dev[[pkg]], reload=FALSE, ...)
                 library(pkg, character.only=TRUE)
+            } else {
+                stop(paste(pkg, ' not found in .dev'))
+            }
+        }, env=.interactive.env)
+
+        assign('.bv', function(pkg, ...) {
+            pkg <- deparse(substitute(pkg))
+
+            if (pkg %in% names(.dev)) {
+                devtools::build_vignettes(.dev[[pkg]], ...)
+                doc_dir <- file.path(.dev[[pkg]], 'inst', 'doc')
+                htms <- list.files(doc_dir, pattern='\\.html$', full.names=TRUE)
+                for (htm in htms) {
+                    browseURL(htm)
+                }
             } else {
                 stop(paste(pkg, ' not found in .dev'))
             }
@@ -309,6 +360,38 @@
             } 
         }) , env=.interactive.env)
 
+
+        assign('.la', function(pkg, doc=FALSE) {
+            if (!missing(pkg)) {
+                pkg <- deparse(substitute(pkg))
+                #setwd(.dev[[pkg]])
+            }
+            setwd(.dev[[pkg]])
+            devtools::load_all()
+            #packrat::on()
+            #packrat::with_extlib(c('devtools', 'roxygen2'), {
+            #    load_all()
+            #})
+            #options(prompt=paste0(pkg, '>'))
+        }, env=.interactive.env)
+
+        assign('.on', function(pkg) {
+            pkg <- deparse(substitute(pkg))
+            setwd(.dev[[pkg]])
+            packrat::on()
+            #packrat::extlib(c('devtools', 'roxygen2'))
+            #options(prompt=paste0(pkg, '>'))
+        }, env=.interactive.env)
+
+        assign('.ex', function() {
+            packrat::extlib(c('devtools', 'roxygen2'))
+        }, env=.interactive.env)
+
+        assign('.off', function() {
+            packrat::off()
+            options(prompt='R>')
+        }, env=.interactive.env)
+
         assign('.clr', function() {
             .rm()
             .oca()
@@ -364,6 +447,25 @@
                 out <- head(out, n)
             out
         }, env=.interactive.env)
+
+
+        assign('.plotview', 
+        
+        .plotview <- function(gg, height=height, width=width) {
+            library(shiny)
+
+            ui <- fixedPage(plotOutput('plot'), height=height, width=width)
+
+            server <- function(input, output, session) {
+                output$plot <- renderPlot({
+                    gg
+                })
+            }
+
+            shinyApp(ui=ui, server=server)
+        }
+        
+        , env=.interactive.env)
 
         # alt .ls.objects
         #napply <- function(names, fn) sapply(names, function(x)

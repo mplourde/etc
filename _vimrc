@@ -13,9 +13,9 @@ else
     call vundle#begin()
 endif
 
-Plugin 'gmarik/Vundle.vim'
+"Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 "Plugin 'MarcWeber/vim-addon-mw-utils' " required for vim-snipmate
 "Plugin 'tomtom/tlib_vim'              " required for vim-snipmate
 "Plugin 'garbas/vim-snipmate'          " vim-snipmate gives an error TriggerUpdate() not found 
@@ -24,14 +24,14 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-git'
 "Plugin 'ervandew/supertab'           
 "Plugin 'sjl/gundo' " causes vundle to stall
-Plugin 'fs111/pydoc.vim'
-Plugin 'alfredodeza/pytest.vim'
+"Plugin 'fs111/pydoc.vim'
+"Plugin 'alfredodeza/pytest.vim'
 Plugin 'vim-scripts/TaskList.vim'
 Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'derekwyatt/vim-scala'
-Plugin 'nvie/vim-flake8'
+"Plugin 'derekwyatt/vim-scala'
+"Plugin 'nvie/vim-flake8'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'kevinw/pyflakes-vim'
+"Plugin 'kevinw/pyflakes-vim'
 
 call vundle#end()         "vundle required
 filetype plugin indent on "vundle required
@@ -39,18 +39,18 @@ filetype plugin indent on "vundle required
 "Bundle 'vim-scripts/pep8'
 
 
-" Syntastic plugin settings
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
+"" Syntastic plugin settings
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
 
-" eclim plugin settings
+"" eclim plugin settings
 let g:EclimDisabled=1
-
-" indent plugin settings
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
+"
+"" indent plugin settings
+"let g:indent_guides_start_level=2
+"let g:indent_guides_guide_size=1
 
 map j gj
 map k gk
@@ -206,7 +206,7 @@ set statusline+=\ %P    "percent through file
 
 " syntastic status line
 set statusline+=\ %#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 "function! AirlineInit()
